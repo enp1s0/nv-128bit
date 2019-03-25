@@ -5,6 +5,7 @@
 constexpr std::size_t N = 1 << 28;
 constexpr std::size_t mem_N = N * 4;
 constexpr std::size_t num_threads = 1 << 8;
+constexpr std::size_t test_count = 1 << 10;
 
 __global__ void read_global(float* const dst, const float* const src){
 	const auto tid = blockIdx.x * blockDim.x + threadIdx.x;
@@ -50,7 +51,17 @@ int main(){
 		auto dst_uptr = get_device_uptr<float>(N);
 		const auto elapsed_time = get_elapsed_time(
 					[&srt_uptr, &dst_uptr](){
-						read_global<<<(N / num_threads), num_threads>>>(srt_uptr.get(), dst_uptr.get());
+						for(std::size_t c = 0; c < test_count; c++) read_global_128<<<(N / num_threads), num_threads>>>(srt_uptr.get(), dst_uptr.get());
 					});
+		std::cout<<"    128bit read : "<<elapsed_time<<" [s]"<<std::endl;
+	}
+	{
+		auto srt_uptr = get_device_uptr<float>(mem_N);
+		auto dst_uptr = get_device_uptr<float>(N);
+		const auto elapsed_time = get_elapsed_time(
+					[&srt_uptr, &dst_uptr](){
+						for(std::size_t c = 0; c < test_count; c++) read_global<<<(N / num_threads), num_threads>>>(srt_uptr.get(), dst_uptr.get());
+					});
+		std::cout<<" 32bit x 4 read : "<<elapsed_time<<" [s]"<<std::endl;
 	}
 }
