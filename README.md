@@ -42,3 +42,9 @@ LDG.E.SYS R7, [R2+0xc] ;                   /* 0x00000c0002077381 */
     128bit read : 1.738 [s]
  32bit x 4 read : 9.129 [s]
 ```
+
+- GeForce GTX 1080Ti
+```
+    128bit read : 5.204 [s]
+ 32bit x 4 read : 15.421 [s]
+```
