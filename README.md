@@ -36,3 +36,9 @@ LDG.E.SYS R7, [R2+0xc] ;                   /* 0x00000c0002077381 */
     128bit read : 2.76 [s]
  32bit x 4 read : 13.651 [s]
 ```
+
+- Titan V
+```
+    128bit read : 1.738 [s]
+ 32bit x 4 read : 9.129 [s]
+```
